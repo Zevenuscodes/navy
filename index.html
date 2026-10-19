@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NavAyu Care</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Hanken+Grotesk:wght@400;500;600&family=Tiro+Devanagari+Sanskrit&display=swap">
+<style>
+/* Layout: asymmetric editorial bands; the 24-hour dosha clock anchors the hero, therapies read as a menu list rather than cards */
+:root {
+  --bg: #EDF0E9;          /* sage-tinted rice paper */
+  --surface: #E2E8DF;
+  --ink: #17321F;         /* logo green, deepened for text */
+  --brand: #1F5A30;       /* logo green */
+  --muted: #55665C;
+  --line: #C6D0C6;
+  --accent: #9C7A1F;      /* logo gold */
+  --accent-ink: #16251E;
+  --madder: #8A2E37;      /* manjistha red, small details only */
+  --kapha: #5D8270;
+  --pitta: #CF9A22;
+  --vata: #8E9BB0;
+  --band: #173A22;
+  --band-fg: #E6ECE3;
+  --logo-filter: none;
+  --font-display: "Marcellus", "Iowan Old Style", Georgia, serif;
+  --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-deva: "Tiro Devanagari Sanskrit", "Kohinoor Devanagari", "Noto Serif Devanagari", serif;
+  --step-0: 1rem; --step-1: 1.25rem; --step-2: 1.6rem; --step-3: 2.2rem; --step-4: clamp(2.4rem, 5.4vw, 4.1rem);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #101A15; --surface: #17241D; --ink: #E3E9E0; --muted: #9DAEA3; --line: #2B3C33;
+  --accent: #D4B050; --accent-ink: #101A15; --madder: #D27A80;
+  --kapha: #7FA892; --pitta: #E2B33C; --vata: #A9B5C9;
+  --band: #0B130F; --band-fg: #E3E9E0; --brand: #6FB083;
+  --logo-filter: brightness(1.75) saturate(.9); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #101A15; --surface: #17241D; --ink: #E3E9E0; --muted: #9DAEA3; --line: #2B3C33;
+  --accent: #D4B050; --accent-ink: #101A15; --madder: #D27A80;
+  --kapha: #7FA892; --pitta: #E2B33C; --vata: #A9B5C9;
+  --band: #0B130F; --band-fg: #E3E9E0; --brand: #6FB083;
+  --logo-filter: brightness(1.75) saturate(.9); color-scheme: dark }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.12; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.deva { font-family: var(--font-deva); }
+.wrap { max-width: 1160px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.eyebrow { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.section { padding-block: clamp(64px, 9vw, 112px); }
+.section-head { display: grid; gap: 14px; max-width: 640px; margin-bottom: 48px; }
+.section-head h2 { font-size: var(--step-3); }
+.section-head p { color: var(--muted); }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; font: 600 .95rem/1 var(--font-body); text-decoration: none; border: 1px solid var(--brand); background: var(--brand); color: var(--bg); border-radius: 2px; cursor: pointer; transition: background .2s, color .2s; }
+.btn:hover { background: transparent; color: var(--brand); }
+.btn.ghost { background: transparent; color: var(--brand); }
+.btn.ghost:hover { background: var(--brand); color: var(--bg); }
+
+/* Header */
+header.site { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 16px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.logo { display: inline-block; line-height: 0; }
+.logo img { height: 58px; width: auto; filter: var(--logo-filter); }
+.foot-logo { margin-bottom: 14px; }
+.foot-logo img { height: 64px; filter: brightness(1.75) saturate(.9); }
+@media (max-width: 480px) { .logo img { height: 46px; } .nav .btn { padding: 10px 14px; font-size: .88rem; } }
+.brand-name { font-family: var(--font-display); font-size: 1.35rem; letter-spacing: .02em; }
+.brand-name small { display: block; font-family: var(--font-body); font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+.nav-links { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; font-size: .95rem; }
+.nav-links a { text-decoration: none; color: var(--muted); }
+.nav-links a:hover { color: var(--ink); }
+.nav .btn { padding: 11px 18px; }
+@media (max-width: 860px) { .nav-links { display: none; } }
+
+/* Hero */
+.hero { padding-block: clamp(48px, 7vw, 88px) clamp(56px, 8vw, 96px); }
+.hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(32px, 6vw, 80px); align-items: center; }
+.hero-copy { display: grid; gap: 26px; min-width: 0; }
+.hero h1 { font-size: var(--step-4); }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero-lede { font-size: 1.12rem; color: var(--muted); max-width: 52ch; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 28px; padding-top: 22px; border-top: 1px solid var(--line); font-size: .9rem; color: var(--muted); }
+.hero-meta strong { display: block; color: var(--ink); font-weight: 600; font-size: 1rem; }
+@media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } }
+
+/* Dosha clock */
+.clock { display: grid; gap: 18px; justify-items: center; min-width: 0; }
+.clock svg { width: 100%; max-width: 420px; height: auto; }
+.clock-caption { max-width: 38ch; text-align: center; font-size: .95rem; color: var(--muted); }
+.clock-caption b { color: var(--ink); font-weight: 600; }
+.clock path.active { animation: breathe 4s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { opacity: 1; } 50% { opacity: .7; } }
+.legend { display: flex; gap: 20px; font-size: .85rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* Doshas */
+.doshas { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+.dosha { padding: 32px 28px 8px 0; display: grid; gap: 12px; align-content: start; }
+.dosha + .dosha { padding-left: 28px; border-left: 1px solid var(--line); }
+.dosha .deva { font-size: 2.6rem; line-height: 1; }
+.dosha h3 { font-size: var(--step-1); }
+.dosha .elements { font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; }
+.dosha p { color: var(--muted); }
+@media (max-width: 760px) { .doshas { grid-template-columns: 1fr; } .dosha, .dosha + .dosha { padding: 26px 0; border-left: 0; border-bottom: 1px solid var(--line); } }
+
+/* Therapies menu */
+.therapies { background: var(--surface); }
+.menu { display: grid; grid-template-columns: 1fr 1fr; column-gap: 64px; }
+.menu-item { display: grid; grid-template-columns: 1fr auto; gap: 4px 20px; padding-block: 22px; border-bottom: 1px solid var(--line); }
+.menu-item h3 { font-size: var(--step-1); display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.menu-item h3 .deva { font-size: 1rem; color: var(--muted); }
+.menu-item .dur { font-variant-numeric: tabular-nums; font-size: .9rem; color: var(--muted); white-space: nowrap; align-self: baseline; }
+.menu-item p { grid-column: 1 / -1; color: var(--muted); font-size: .95rem; max-width: 56ch; }
+.tags { grid-column: 1 / -1; display: flex; gap: 8px; margin-top: 6px; }
+.tag { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; padding: 3px 8px; border: 1px solid currentColor; border-radius: 2px; }
+.tag.v { color: var(--vata); } .tag.p { color: var(--pitta); } .tag.k { color: var(--kapha); }
+@media (max-width: 760px) { .menu { grid-template-columns: 1fr; } }
+
+/* Panchakarma band */
+.band { background: var(--band); color: var(--band-fg); }
+.band .eyebrow, .band .section-head p { color: color-mix(in srgb, var(--band-fg) 65%, transparent); }
+.karmas { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
+.karma { padding: 26px 22px 26px 0; display: grid; gap: 10px; align-content: start; border-top: 2px solid color-mix(in srgb, var(--band-fg) 18%, transparent); }
+.karma + .karma { padding-left: 22px; }
+.karma .n { font-variant-numeric: tabular-nums; color: var(--accent); font-weight: 600; font-size: .85rem; }
+.karma h3 { font-size: var(--step-1); }
+.karma .deva { font-size: 1.05rem; opacity: .7; }
+.karma p { font-size: .92rem; opacity: .78; }
+@media (max-width: 960px) { .karmas { grid-template-columns: 1fr 1fr; } .karma + .karma { padding-left: 0; } .karma { padding-right: 22px; } }
+@media (max-width: 520px) { .karmas { grid-template-columns: 1fr; } }
+.band-note { margin-top: 40px; font-size: .9rem; opacity: .7; max-width: 70ch; }
+
+/* Programmes */
+.programmes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.prog { display: grid; gap: 14px; align-content: start; padding: 30px 28px; border: 1px solid var(--line); background: var(--bg); }
+.prog.featured { border-color: var(--ink); }
+.prog .days { font-family: var(--font-display); font-size: 3.2rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.prog .days small { font-family: var(--font-body); font-size: .9rem; color: var(--muted); margin-left: 6px; }
+.prog h3 { font-size: var(--step-1); }
+.prog ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; font-size: .94rem; color: var(--muted); }
+.prog li { padding-left: 18px; position: relative; }
+.prog li::before { content: ""; position: absolute; left: 0; top: .7em; width: 8px; height: 1px; background: var(--accent); }
+.prog .note { font-size: .82rem; color: var(--madder); font-weight: 600; letter-spacing: .04em; }
+@media (max-width: 900px) { .programmes { grid-template-columns: 1fr; } }
+
+/* Process */
+.process { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; counter-reset: step; }
+.step { display: grid; gap: 10px; align-content: start; }
+.step .n { width: 40px; height: 40px; border: 1px solid var(--ink); border-radius: 50%; display: grid; place-items: center; font-variant-numeric: tabular-nums; font-weight: 600; font-size: .9rem; }
+.step h3 { font-size: var(--step-1); }
+.step p { color: var(--muted); font-size: .95rem; }
+@media (max-width: 860px) { .process { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .process { grid-template-columns: 1fr; } }
+
+/* Physicians */
+.vaidyas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.vaidya { display: grid; gap: 12px; align-content: start; }
+.portrait { aspect-ratio: 4 / 5; max-width: 100%; background: var(--surface); border: 1px dashed var(--line); display: grid; place-items: center; color: var(--muted); font-size: .85rem; }
+.vaidya h3 { font-size: var(--step-1); }
+.vaidya .cred { font-size: .85rem; letter-spacing: .06em; color: var(--muted); }
+@media (max-width: 860px) { .vaidyas { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .vaidyas { grid-template-columns: 1fr; } }
+
+/* Quote */
+.quote { border-block: 1px solid var(--line); padding-block: 64px; display: grid; gap: 18px; justify-items: start; }
+.quote .deva { font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.5; }
+.quote p { font-family: var(--font-display); font-size: var(--step-2); max-width: 36ch; line-height: 1.3; }
+.quote cite { font-style: normal; font-size: .85rem; color: var(--muted); letter-spacing: .06em; }
+
+/* Booking */
+.visit-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(32px, 6vw, 80px); }
+.visit-info { display: grid; gap: 28px; align-content: start; min-width: 0; }
+.info-row { display: grid; gap: 4px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+.info-row .eyebrow { margin-bottom: 4px; }
+.hours { display: grid; grid-template-columns: auto 1fr; gap: 4px 24px; font-variant-numeric: tabular-nums; }
+form.book { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: clamp(24px, 4vw, 40px); background: var(--surface); min-width: 0; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+label { font-size: .85rem; font-weight: 600; }
+input, select, textarea { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 2px; padding: 11px 12px; width: 100%; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--ink); }
+textarea { min-height: 96px; resize: vertical; }
+.form-foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; justify-content: space-between; }
+.form-foot small { color: var(--muted); max-width: 40ch; }
+.confirm { grid-column: 1 / -1; padding: 14px 16px; border-left: 3px solid var(--kapha); background: var(--bg); font-size: .95rem; }
+@media (max-width: 860px) { .visit-grid { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { form.book { grid-template-columns: 1fr; } }
+
+/* Footer */
+footer { background: var(--band); color: var(--band-fg); padding-block: 56px 40px; font-size: .92rem; }
+.foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; }
+.foot-grid h4 { margin: 0 0 12px; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; opacity: .6; font-weight: 600; }
+.foot-grid ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.foot-grid a { text-decoration: none; opacity: .85; }
+.foot-grid a:hover { opacity: 1; text-decoration: underline; }
+.foot-base { margin-top: 48px; padding-top: 20px; border-top: 1px solid color-mix(in srgb, var(--band-fg) 15%, transparent); display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; opacity: .6; font-size: .82rem; }
+@media (max-width: 760px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand logo" href="#top"><img src="logo.png" alt="NavAyu Care, Aayurbhavtu Jeewanam" width="649" height="226"></a>
+    <ul class="nav-links">
+      <li><a href="#doshas">Prakriti</a></li>
+      <li><a href="#therapies">Therapies</a></li>
+      <li><a href="#panchakarma">Panchakarma</a></li>
+      <li><a href="#vaidyas">Vaidyas</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+    <a class="btn" href="#visit">Book consultation</a>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Classical Ayurveda · Panchakarma · Rasayana</span>
+        <h1>Care that begins with <em>your prakriti</em>, not a package.</h1>
+        <p class="hero-lede">Every plan at NavAyu Care starts with a physician reading your pulse and constitution. Therapies, diet and daily routine follow from that reading, and change as you do.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#visit">Book a Nadi Pariksha</a>
+          <a class="btn ghost" href="#therapies">View therapies</a>
+        </div>
+        <div class="hero-meta">
+          <div><strong>BAMS &amp; MD (Ayu)</strong>qualified vaidyas</div>
+          <div><strong>7 · 14 · 21 days</strong>Panchakarma programmes</div>
+          <div><strong>In-house</strong>medicated oils &amp; kashayams</div>
+        </div>
+      </div>
+
+      <figure class="clock" aria-labelledby="clock-cap">
+        <svg id="dial" viewBox="-200 -200 400 400" role="img" aria-label="Twenty-four hour dosha clock"></svg>
+        <figcaption class="clock-caption" id="clock-cap">Loading the dosha clock…</figcaption>
+        <div class="legend">
+          <span><i style="background:var(--kapha)"></i>Kapha</span>
+          <span><i style="background:var(--pitta)"></i>Pitta</span>
+          <span><i style="background:var(--vata)"></i>Vata</span>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- DOSHAS -->
+  <section class="section" id="doshas" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Tridosha</span>
+        <h2>Three doshas. One constitution that is yours alone.</h2>
+        <p>Your prakriti is the balance of Vata, Pitta and Kapha you were born with. Vikriti is where that balance stands today. Treatment closes the gap between the two.</p>
+      </div>
+      <div class="doshas">
+        <article class="dosha">
+          <span class="deva" style="color:var(--vata)">वात</span>
+          <h3>Vata</h3>
+          <span class="elements" style="color:var(--vata)">Air + Space</span>
+          <p>Governs movement: breath, circulation, nerve impulses. Out of balance it shows as dry skin, irregular sleep, anxiety and joint stiffness.</p>
+        </article>
+        <article class="dosha">
+          <span class="deva" style="color:var(--pitta)">पित्त</span>
+          <h3>Pitta</h3>
+          <span class="elements" style="color:var(--pitta)">Fire + Water</span>
+          <p>Governs transformation: digestion, metabolism, body heat. Excess appears as acidity, inflammation, skin rashes and irritability.</p>
+        </article>
+        <article class="dosha">
+          <span class="deva" style="color:var(--kapha)">कफ</span>
+          <h3>Kapha</h3>
+          <span class="elements" style="color:var(--kapha)">Earth + Water</span>
+          <p>Governs structure and lubrication: tissue, immunity, stamina. Aggravated Kapha brings congestion, weight gain and lethargy.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- THERAPIES -->
+  <section class="section therapies" id="therapies">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Therapies</span>
+        <h2>Treatments, prescribed after consultation</h2>
+        <p>Oils and herbal preparations are chosen by your vaidya for your dosha and condition. Durations include preparation and rest time.</p>
+      </div>
+      <div class="menu">
+        <div class="menu-item">
+          <h3>Abhyanga <span class="deva">अभ्यङ्ग</span></h3><span class="dur">60 min</span>
+          <p>Full-body massage with warm medicated oil by two synchronised therapists, followed by steam (swedana).</p>
+          <div class="tags"><span class="tag v">Vata</span><span class="tag k">Kapha</span></div>
+        </div>
+        <div class="menu-item">
+          <h3>Shirodhara <span class="deva">शिरोधारा</span></h3><span class="dur">45 min</span>
+          <p>A steady stream of warm oil, buttermilk or herbal decoction poured over the forehead. Used for insomnia, stress and headaches.</p>
+          <div class="tags"><span class="tag v">Vata</span><span class="tag p">Pitta</span></div>
+        </div>
+        <div class="menu-item">
+          <h3>Kati Basti <span class="deva">कटि बस्ति</span></h3><span class="dur">40 min</span>
+          <p>Warm oil held in a ring of black-gram dough over the lower back. For lumbar pain, disc conditions and stiffness.</p>
+          <div class="tags"><span class="tag v">Vata</span></div>
+        </div>
+        <div class="menu-item">
+          <h3>Udvartana <span class="deva">उद्वर्तन</span></h3><span class="dur">50 min</span>
+          <p>Dry herbal powder massage in upward strokes. Supports weight management and improves skin texture.</p>
+          <div class="tags"><span class="tag k">Kapha</span></div>
+        </div>
+        <div class="menu-item">
+          <h3>Pizhichil <span class="deva">पिऴिच्चिल्</span></h3><span class="dur">75 min</span>
+          <p>Lukewarm medicated oil squeezed continuously over the body while it is massaged. A Kerala therapy for neuromuscular conditions.</p>
+          <div class="tags"><span class="tag v">Vata</span><span class="tag p">Pitta</span></div>
+        </div>
+        <div class="menu-item">
+          <h3>Netra Tarpana <span class="deva">नेत्र तर्पण</span></h3><span class="dur">30 min</span>
+          <p>Medicated ghee pooled over the eyes within a dough ring. For eye strain, dryness and screen fatigue.</p>
+          <div class="tags"><span class="tag p">Pitta</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PANCHAKARMA -->
+  <section class="section band" id="panchakarma">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Panchakarma · पञ्चकर्म</span>
+        <h2>The five cleansing actions</h2>
+        <p>Panchakarma removes accumulated doshas from the body. It is preceded by purvakarma (oleation and sudation) and followed by samsarjana krama, a graded return to normal diet.</p>
+      </div>
+      <div class="karmas">
+        <div class="karma"><span class="n">1</span><h3>Vamana</h3><span class="deva">वमन</span><p>Therapeutic emesis to clear excess Kapha from the chest and stomach.</p></div>
+        <div class="karma"><span class="n">2</span><h3>Virechana</h3><span class="deva">विरेचन</span><p>Controlled purgation that eliminates Pitta through the intestines.</p></div>
+        <div class="karma"><span class="n">3</span><h3>Basti</h3><span class="deva">बस्ति</span><p>Medicated enemas of oil or decoction, the primary treatment for Vata.</p></div>
+        <div class="karma"><span class="n">4</span><h3>Nasya</h3><span class="deva">नस्य</span><p>Herbal oils administered through the nose for head, sinus and neck conditions.</p></div>
+        <div class="karma"><span class="n">5</span><h3>Raktamokshana</h3><span class="deva">रक्तमोक्षण</span><p>Bloodletting, used selectively for certain skin and blood disorders.</p></div>
+      </div>
+      <p class="band-note">Your vaidya selects which karmas are appropriate. Most programmes use two or three, never all five, and only after a fitness assessment.</p>
+    </div>
+  </section>
+
+  <!-- PROGRAMMES -->
+  <section class="section" id="programmes">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Residential &amp; day programmes</span>
+        <h2>Programmes by length of stay</h2>
+        <p>Each programme includes daily consultation, sattvic meals prepared to your diet chart, and all medicines for the stay.</p>
+      </div>
+      <div class="programmes">
+        <article class="prog">
+          <div class="days">7<small>days</small></div>
+          <h3>Rejuvenation</h3>
+          <ul><li>Abhyanga and steam daily</li><li>Shirodhara on alternate days</li><li>Dinacharya coaching and yoga</li></ul>
+          <span class="note">Day programme available</span>
+        </article>
+        <article class="prog featured">
+          <div class="days">14<small>days</small></div>
+          <h3>Classical Panchakarma</h3>
+          <ul><li>Purvakarma with internal snehapana</li><li>Two primary karmas chosen by your vaidya</li><li>Samsarjana krama diet</li></ul>
+          <span class="note">Residential · most prescribed</span>
+        </article>
+        <article class="prog">
+          <div class="days">21<small>days</small></div>
+          <h3>Rasayana &amp; Recovery</h3>
+          <ul><li>Full Panchakarma course</li><li>Rasayana (rejuvenative) medicines</li><li>Discharge plan with seasonal routine</li></ul>
+          <span class="note">Residential only</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Your first visit</span>
+        <h2>How a consultation works</h2>
+      </div>
+      <div class="process">
+        <div class="step"><span class="n">1</span><h3>Nadi Pariksha</h3><p>Your vaidya reads your pulse at the wrist to assess the state of each dosha.</p></div>
+        <div class="step"><span class="n">2</span><h3>Ashtavidha Pariksha</h3><p>The eightfold examination: pulse, tongue, voice, skin, eyes, appearance, urine and stool.</p></div>
+        <div class="step"><span class="n">3</span><h3>Treatment plan</h3><p>A written plan of therapies, medicines, diet (pathya) and daily routine.</p></div>
+        <div class="step"><span class="n">4</span><h3>Follow-up</h3><p>Reviews at set intervals, with the plan adjusted for season and progress.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VAIDYAS -->
+  <section class="section therapies" id="vaidyas">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Our vaidyas</span>
+        <h2>Physicians, not spa therapists</h2>
+        <p>Every treatment is prescribed and supervised by a registered Ayurvedic physician.</p>
+      </div>
+      <div class="vaidyas">
+        <article class="vaidya"><div class="portrait">Portrait 4:5</div><h3>Dr. [Full Name]</h3><span class="cred">BAMS, MD (Panchakarma) · Chief Physician</span></article>
+        <article class="vaidya"><div class="portrait">Portrait 4:5</div><h3>Dr. [Full Name]</h3><span class="cred">BAMS, MD (Kayachikitsa) · Consultant</span></article>
+        <article class="vaidya"><div class="portrait">Portrait 4:5</div><h3>Dr. [Full Name]</h3><span class="cred">BAMS · Women's health &amp; Prasuti Tantra</span></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <section class="section" style="padding-bottom:0">
+    <div class="wrap">
+      <div class="quote">
+        <span class="deva">स्वस्थस्य स्वास्थ्य रक्षणं आतुरस्य विकार प्रशमनं च</span>
+        <p>Protect the health of the healthy, and relieve the illness of the sick.</p>
+        <cite>Charaka Samhita, Sutrasthana 30.26</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section class="section" id="visit">
+    <div class="wrap visit-grid">
+      <div class="visit-info">
+        <div class="section-head" style="margin-bottom:0">
+          <span class="eyebrow">Visit</span>
+          <h2>Book a consultation</h2>
+          <p>Consultations last about 45 minutes. Please come on a light stomach and bring any recent reports.</p>
+        </div>
+        <div class="info-row">
+          <span class="eyebrow">Address</span>
+          <span>[Street address]<br>[City, State, PIN]</span>
+        </div>
+        <div class="info-row">
+          <span class="eyebrow">Phone &amp; email</span>
+          <span>+91 [00000 00000]<br>hello@[navayucare-domain]</span>
+        </div>
+        <div class="info-row" style="border-bottom:0">
+          <span class="eyebrow">Hours</span>
+          <div class="hours"><span>Mon – Sat</span><span>7:00 am – 7:30 pm</span><span>Sunday</span><span>7:00 am – 1:00 pm</span></div>
+        </div>
+      </div>
+
+      <form class="book" id="book-form" novalidate>
+        <div class="field"><label for="f-name">Full name</label><input id="f-name" name="name" autocomplete="name" required></div>
+        <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required></div>
+        <div class="field"><label for="f-type">Visit type</label>
+          <select id="f-type" name="type">
+            <option>First consultation</option><option>Follow-up</option><option>Therapy session</option><option>Panchakarma enquiry</option>
+          </select></div>
+        <div class="field"><label for="f-date">Preferred date</label><input id="f-date" name="date" type="date" required></div>
+        <div class="field full"><label for="f-note">What would you like help with?</label><textarea id="f-note" name="note" placeholder="e.g. lower back pain for six months, poor sleep"></textarea></div>
+        <div class="form-foot">
+          <small>We call back within one working day to confirm a time with your vaidya.</small>
+          <button class="btn" type="submit">Request appointment</button>
+        </div>
+        <p class="confirm" id="confirm" hidden></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <span class="logo foot-logo"><img src="logo.png" alt="NavAyu Care" width="649" height="226"></span>
+        <p style="opacity:.75;max-width:34ch">Classical Ayurvedic treatment, Panchakarma and rejuvenation, prescribed by registered physicians.</p>
+      </div>
+      <div><h4>Care</h4><ul><li><a href="#therapies">Therapies</a></li><li><a href="#panchakarma">Panchakarma</a></li><li><a href="#programmes">Programmes</a></li></ul></div>
+      <div><h4>Centre</h4><ul><li><a href="#vaidyas">Vaidyas</a></li><li><a href="#visit">Visit &amp; hours</a></li><li><a href="#doshas">About prakriti</a></li></ul></div>
+      <div><h4>Follow</h4><ul><li><a href="#">Instagram</a></li><li><a href="#">YouTube</a></li><li><a href="#">WhatsApp</a></li></ul></div>
+    </div>
+    <div class="foot-base"><span>© 2026 NavAyu Care</span><span>Ayurvedic treatment complements, and does not replace, emergency medical care.</span></div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Classical dosha kala: Kapha 6–10, Pitta 10–14, Vata 14–18, repeating through the night
+  const segs = [[6,10,'kapha'],[10,14,'pitta'],[14,18,'vata'],[18,22,'kapha'],[22,26,'pitta'],[26,30,'vata']];
+  const notes = {
+    kapha: ['कफ काल', 'Kapha kala', 'a steady, heavy time. Best for exercise and active work; avoid oversleeping.'],
+    pitta: ['पित्त काल', 'Pitta kala', 'digestive fire is strongest. Take your main meal now, or let the body digest in sleep.'],
+    vata:  ['वात काल', 'Vata kala', 'a light, mobile time. Good for creative work, meditation and, before dawn, waking.']
+  };
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('dial');
+  const ang = h => (h / 24) * 2 * Math.PI - Math.PI / 2;
+  const pt = (r, h) => [r * Math.cos(ang(h)), r * Math.sin(ang(h))];
+  const el = (tag, attrs, text) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text) e.textContent = text; svg.appendChild(e); return e; };
+  const R1 = 168, R0 = 118;
+
+  const arcs = segs.map(([a, b, d]) => {
+    const [x1, y1] = pt(R1, a + .04), [x2, y2] = pt(R1, b - .04), [x3, y3] = pt(R0, b - .04), [x4, y4] = pt(R0, a + .04);
+    const p = el('path', { d: `M${x1} ${y1}A${R1} ${R1} 0 0 1 ${x2} ${y2}L${x3} ${y3}A${R0} ${R0} 0 0 0 ${x4} ${y4}Z`, fill: `var(--${d})`, opacity: .35 });
+    const [lx, ly] = pt((R0 + R1) / 2, (a + b) / 2);
+    el('text', { x: lx, y: ly + 5, 'text-anchor': 'middle', fill: 'var(--ink)', 'font-family': 'var(--font-body)', 'font-size': 13, 'font-weight': 600, 'letter-spacing': '.1em' }, d.toUpperCase());
+    return { a, b, d, p };
+  });
+
+  for (let h = 0; h < 24; h++) {
+    const major = h % 6 === 0;
+    const [x1, y1] = pt(R1 + 6, h), [x2, y2] = pt(R1 + (major ? 16 : 10), h);
+    el('line', { x1, y1, x2, y2, stroke: 'var(--muted)', 'stroke-width': major ? 1.5 : 1 });
+  }
+  [[0, '12 am'], [6, '6 am'], [12, '12 pm'], [18, '6 pm']].forEach(([h, t]) => {
+    const [x, y] = pt(R1 + 28, h);
+    el('text', { x, y: y + 4, 'text-anchor': 'middle', fill: 'var(--muted)', 'font-family': 'var(--font-body)', 'font-size': 11 }, t);
+  });
+  const RS = R0 - 14;
+  el('circle', { r: RS, fill: 'none', stroke: 'var(--line)' });
+  // Seconds: a short gold trail chasing a dot round the inner ring, one turn per minute
+  const trail = el('path', { fill: 'none', stroke: 'var(--accent)', 'stroke-width': 2.5, 'stroke-linecap': 'round', opacity: .55 });
+  const secDot = el('circle', { r: 4.5, fill: 'var(--accent)' });
+  const hand = el('line', { x1: 0, y1: 0, x2: 0, y2: 0, stroke: 'var(--madder)', 'stroke-width': 2, 'stroke-linecap': 'round' });
+  el('circle', { r: 4, fill: 'var(--madder)' });
+  const tTime = el('text', { y: -28, 'text-anchor': 'middle', fill: 'var(--muted)', 'font-family': 'var(--font-body)', 'font-size': 13, 'font-variant-numeric': 'tabular-nums' });
+  const tDeva = el('text', { y: 52, 'text-anchor': 'middle', fill: 'var(--ink)', 'font-family': 'var(--font-deva)', 'font-size': 26 });
+  const cap = document.getElementById('clock-cap');
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const start = performance.now(), INTRO = 1800;
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  const onCircle = (r, f) => { const a = f * 2 * Math.PI - Math.PI / 2; return [r * Math.cos(a), r * Math.sin(a)]; };
+  let lastDosha = null, lastSec = -1;
+
+  function frame(t) {
+    const now = new Date();
+    const sec = now.getSeconds() + now.getMilliseconds() / 1000;
+    const hNow = now.getHours() + now.getMinutes() / 60 + sec / 3600;
+    // Opening sweep: the hand travels from midnight to the current time
+    const k = reduce ? 1 : ease(Math.min(1, (t - start) / INTRO));
+    const h = hNow * k;
+    const [x, y] = pt(R0 - 30, h);
+    hand.setAttribute('x2', x); hand.setAttribute('y2', y);
+
+    const f = sec / 60;
+    const [sx, sy] = onCircle(RS, f), [tx, ty] = onCircle(RS, f - 0.12);
+    secDot.setAttribute('cx', sx); secDot.setAttribute('cy', sy);
+    trail.setAttribute('d', `M${tx} ${ty}A${RS} ${RS} 0 0 1 ${sx} ${sy}`);
+
+    if (Math.floor(sec) !== lastSec) {
+      lastSec = Math.floor(sec);
+      tTime.textContent = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' });
+      const hh = hNow < 6 ? hNow + 24 : hNow;
+      const cur = arcs.find(s => hh >= s.a && hh < s.b);
+      if (cur.d !== lastDosha || cur.p.classList.contains('active') === false) {
+        lastDosha = cur.d;
+        arcs.forEach(s => { s.p.classList.toggle('active', s === cur); s.p.setAttribute('opacity', s === cur ? 1 : .3); });
+        const n = notes[cur.d];
+        tDeva.textContent = n[0];
+        cap.innerHTML = `<b>Now: ${n[1]}</b>, ${n[2]}`;
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // Booking form: no backend in this template; wire the submit handler to your booking service.
+  const form = document.getElementById('book-form');
+  const msg = document.getElementById('confirm');
+  const date = document.getElementById('f-date');
+  date.min = new Date().toISOString().slice(0, 10);
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = form.name.value.trim(), phone = form.phone.value.trim();
+    if (!name || !phone || !date.value) {
+      msg.style.borderLeftColor = 'var(--madder)';
+      msg.textContent = 'Add your name, phone number and a preferred date so we can call you back.';
+    } else {
+      msg.style.borderLeftColor = 'var(--kapha)';
+      const d = new Date(date.value + 'T00:00').toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' });
+      msg.textContent = `Request noted for ${d}. In the live site, this is where the clinic receives it and calls ${name.split(' ')[0]} back.`;
+    }
+    msg.hidden = false;
+  });
+})();
+</script>
+</body>
+</html>
