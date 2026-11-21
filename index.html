@@ -102,27 +102,15 @@ dialog h2 { font-size: 1.3rem; }
 .offering .button::before { content: ""; position: absolute; inset: 0; }
 .center-action { display: flex; justify-content: center; margin-top: 32px; }
 
-/* centre photos */
-.centre-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(2, 300px); gap: 16px; }
-.centre-grid a { display: block; overflow: hidden; border-radius: 12px; border: 1px solid var(--line); background: var(--tint); }
-.centre-grid a.tall { grid-row: 1 / span 2; }
-.centre-grid img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .2s; }
-.centre-grid a:hover img { transform: scale(1.035); }
-@media (max-width: 767px) {
-  .centre-grid { grid-template-columns: 1fr; grid-template-rows: none; }
-  .centre-grid a.tall { grid-row: auto; }
-  .centre-grid a, .centre-grid a.tall { height: 260px; }
-}
-
 /* gallery */
 .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .gallery a { display: block; overflow: hidden; border-radius: 12px; border: 1px solid var(--line); background: var(--tint); }
 .gallery img { display: block; width: 100%; height: 220px; object-fit: cover; transition: transform .2s; }
 .gallery a:hover img { transform: scale(1.035); }
-.gallery a:nth-child(n+5) { display: none; }
+.video-tile { overflow: hidden; border-radius: 12px; border: 1px solid var(--line); background: #000; }
+.video-tile video { display: block; width: 100%; height: 220px; object-fit: cover; }
 @media (min-width: 900px) {
   .gallery { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .gallery a:nth-child(n+5) { display: block; }
 }
 
 /* reviews */
@@ -276,17 +264,6 @@ footer.site hr { border: 0; border-top: 1px solid #ffffff26; margin: 32px 0 0; }
     </div>
   </section>
 
-  <section class="section" id="centre" style="padding-top:0">
-    <div class="container">
-      <div class="section-heading"><h2>Visit our centre in Harrawla</h2></div>
-      <div class="centre-grid">
-        <a class="tall" href="images/centre-night.jpg" target="_blank" rel="noreferrer"><img loading="lazy" src="images/centre-night.jpg" alt="Navayu Care building lit up at night"></a>
-        <a href="images/centre-signage.jpg" target="_blank" rel="noreferrer"><img loading="lazy" src="images/centre-signage.jpg" alt="Navayu Care signboard listing Panchakarma, Kshar Sutra, Agnikarma and cupping treatments"></a>
-        <a href="images/piles-care-centre.jpg" target="_blank" rel="noreferrer"><img loading="lazy" src="images/piles-care-centre.jpg" alt="Piles Care Centre and Navayu Care logo sign at the entrance"></a>
-      </div>
-    </div>
-  </section>
-
   <section class="section" id="gallery" style="padding-top:0">
     <div class="container">
       <div class="section-heading"><h2>Our photo gallery</h2></div>
@@ -377,18 +354,15 @@ document.getElementById("service-grid").innerHTML = services.map((s, i) =>
   `<article class="offering" id="service-${i + 1}"><h3>${s}</h3><a class="button" target="_blank" rel="noreferrer" href="${WA}${encodeURIComponent("I want to know more about " + s)}">Enquire</a></article>`
 ).join("");
 
-const photos = [
-  "yPI-AekelHCX74bYC1kxt2UeSx_Em41igPr3iBbRG1Lfwel3HNq9UbTD_Dp6FCNpr4dgPkOvxYyxPoui",
-  "zdJVYxV3UX7vfCK4BQUp08izS_JIp1QwyTKiKxwnuzEMKj_W6MdsRC0nd8w274GhC8huZ1s14xTCysch",
-  "FrY4AJ0VjHjwoTlADq26r2iSq2p3jDYgcF_s8iU_gb0TkXwUMKQRXFX6jtvwFA3QF3tJMA7SZjr3Pyv5",
-  "yhseHVGDB8wUo7sggBAl7rHFEljQz83a9OkEry1Lf0tZA-qywY0iVsD_vRJdvguoBfuYz7F_1D--VGzU",
-  "8uvhR_dboIfTOWQaLNoknKOYLFDWpwm2qGjswm0WUmDJUnUzpEGeejLdqwsMPFiP33-5h9K8GimpMYSy",
-  "GWlbafqdejuIZQ09OpOifnXho52m6VshOFVdeE7hbWoOj-oMnULYxkRgMRB28fdVR82gBePN7U2tteJ1",
-  "suCx3K2OFfTFRB__8JzGvWNVShPs3BhiYbOk_SsP0ftB35QV2Ewj8MMfOwVmzqkU6zpzWpWAKmfbTP6G",
-  "kyBj0X4ZkUQIHqp-NQJ08hys0e2Y0DcmzQC6D4bykmnvXsNKctZj1fKCy9ghnRWbenkSdZRocbDOysHO"
+const media = [
+  { src: "images/centre-night.jpg", alt: "Navayu Care building lit up at night" },
+  { src: "images/centre-signage.jpg", alt: "Navayu Care signboard listing Panchakarma, Kshar Sutra, Agnikarma and cupping treatments" },
+  { src: "images/piles-care-centre.jpg", alt: "Piles Care Centre and Navayu Care logo sign at the entrance" },
+  { video: "videos/navayu-centre.mp4", alt: "Video of the Navayu Care centre" }
 ];
-document.getElementById("gallery-grid").innerHTML = photos.map((p, i) =>
-  `<a href="https://lh3.googleusercontent.com/${p}=s0" target="_blank" rel="noreferrer"><img loading="lazy" width="720" height="480" alt="Navayu Care — business photo ${i + 1}" src="https://lh3.googleusercontent.com/${p}"></a>`
+document.getElementById("gallery-grid").innerHTML = media.map(m => m.video
+  ? `<div class="video-tile"><video controls preload="metadata" playsinline aria-label="${m.alt}" src="${m.video}"></video></div>`
+  : `<a href="${m.src}" target="_blank" rel="noreferrer"><img loading="lazy" alt="${m.alt}" src="${m.src}"></a>`
 ).join("");
 
 const reviews = [
