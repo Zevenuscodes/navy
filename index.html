@@ -102,6 +102,18 @@ dialog h2 { font-size: 1.3rem; }
 .offering .button::before { content: ""; position: absolute; inset: 0; }
 .center-action { display: flex; justify-content: center; margin-top: 32px; }
 
+/* centre photos */
+.centre-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(2, 300px); gap: 16px; }
+.centre-grid a { display: block; overflow: hidden; border-radius: 12px; border: 1px solid var(--line); background: var(--tint); }
+.centre-grid a.tall { grid-row: 1 / span 2; }
+.centre-grid img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .2s; }
+.centre-grid a:hover img { transform: scale(1.035); }
+@media (max-width: 767px) {
+  .centre-grid { grid-template-columns: 1fr; grid-template-rows: none; }
+  .centre-grid a.tall { grid-row: auto; }
+  .centre-grid a, .centre-grid a.tall { height: 260px; }
+}
+
 /* gallery */
 .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .gallery a { display: block; overflow: hidden; border-radius: 12px; border: 1px solid var(--line); background: var(--tint); }
@@ -261,6 +273,17 @@ footer.site hr { border: 0; border-top: 1px solid #ffffff26; margin: 32px 0 0; }
     <div class="container">
       <div class="section-heading"><h2>Services From The Best Ayurvedic Clinic in Dehradun</h2></div>
       <div class="grid" id="service-grid"></div>
+    </div>
+  </section>
+
+  <section class="section" id="centre" style="padding-top:0">
+    <div class="container">
+      <div class="section-heading"><h2>Visit our centre in Harrawla</h2></div>
+      <div class="centre-grid">
+        <a class="tall" href="images/centre-night.jpg" target="_blank" rel="noreferrer"><img loading="lazy" src="images/centre-night.jpg" alt="Navayu Care building lit up at night"></a>
+        <a href="images/centre-signage.jpg" target="_blank" rel="noreferrer"><img loading="lazy" src="images/centre-signage.jpg" alt="Navayu Care signboard listing Panchakarma, Kshar Sutra, Agnikarma and cupping treatments"></a>
+        <a href="images/piles-care-centre.jpg" target="_blank" rel="noreferrer"><img loading="lazy" src="images/piles-care-centre.jpg" alt="Piles Care Centre and Navayu Care logo sign at the entrance"></a>
+      </div>
     </div>
   </section>
 
